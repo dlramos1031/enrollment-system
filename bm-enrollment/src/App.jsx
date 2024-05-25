@@ -13,7 +13,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-950">
+    <div className="min-h-screen min-w-max flex items-center justify-center bg-blue-950">
       <div className="bg-white p-10 rounded-lg shadow-md w-96">
         {isLoggedIn ? (
           <Dashboard />
