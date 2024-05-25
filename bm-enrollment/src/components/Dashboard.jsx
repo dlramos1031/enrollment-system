@@ -1,12 +1,24 @@
-import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import DashboardPage from './components/DashboardPage';
+import Page1 from './components/pages/Page1';
+import Page2 from './components/pages/Page2';
+import Page3 from './components/pages/Page3';
 
-function Dashboard() {
+export default function Dashboard() {
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
-      <p>Welcome to the dashboard!</p>
-    </div>
+    <Router>
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 p-10">
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/page1" element={<Page1 />} />
+            <Route path="/page2" element={<Page2 />} />
+            <Route path="/page3" element={<Page3 />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
-
-export default Dashboard;
