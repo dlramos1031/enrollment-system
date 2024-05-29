@@ -1,52 +1,17 @@
-import React, { useState } from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import './App.css';
-
+import './App.css'
+import Sidebar from './components/Sidebar';
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
 
   return (
-    <div className="min-h-screen min-w-max flex items-center justify-center bg-blue-950">
-      <div className="bg-white p-10 rounded-lg shadow-md w-96">
-        {isLoggedIn ? (
-          <Dashboard />
-        ) : (
-          isLogin ? (
-            <Login onLogin={handleLogin} />
-          ) : (
-            <Register />
-          )
-        )}
-        {isLogin && !isLoggedIn && (
-          <div className="mt-4 text-center">
-            <button
-              className="text-blue-500 hover:underline"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              Don't have an account? Register
-            </button>
-          </div>
-        )}
-        {!isLogin && !isLoggedIn && (
-          <div className="mt-4 text-center">
-            <button
-              className="text-blue-500 hover:underline"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              Already have an account? Login
-            </button>
-          </div>
-        )}
+    <div className="d-flex">
+      <Sidebar />
+      <div className="flex-grow-1 p-3">
+        <h1>Welcome to the Dashboard</h1>
+        <p>This is a simple dashboard layout with a sidebar using React, Vite, and Bootstrap.</p>
+        {/* Add your dashboard content here */}
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
