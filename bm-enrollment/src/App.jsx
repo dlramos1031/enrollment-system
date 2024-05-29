@@ -1,17 +1,22 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-function App() {
+import Enrollment from './components/Enrollment';
+import Application from './components/Application';
+import Profile from './components/Profile';
 
+const App = () => {
   return (
     <div className="d-flex">
       <Sidebar />
-      <div className="flex-grow-1 p-3">
-        <h1>Welcome to the Dashboard</h1>
-        <p>This is a simple dashboard layout with a sidebar using React, Vite, and Bootstrap.</p>
-        {/* Add your dashboard content here */}
+      <div className="flex-grow-1 p-3" style={{ marginLeft: '250px' }}>
+        <Routes>
+          <Route path="/Enrollment" element={<Enrollment />} />
+          <Route path="/Application" element={<Application />} />
+          <Route path="/Profile" element={<Profile />} />
+        </Routes>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
