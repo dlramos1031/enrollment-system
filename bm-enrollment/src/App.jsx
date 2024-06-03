@@ -1,8 +1,8 @@
-import Dashboard from "./components/Dashboard";
+import AuthContainer from "./components/AuthContainer";
 
 const App = () => {
   return (
-    <Dashboard />
+    <AuthContainer />
   );
 };
 
