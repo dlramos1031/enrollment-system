@@ -1,7 +1,11 @@
+// Profile.jsx
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useUser } from '../contexts/UserContext';
 
 function Profile() {
+  const { user } = useUser();
+
   // Initialize state for form inputs
   const [formData, setFormData] = useState({
     firstName: '',
@@ -13,38 +17,70 @@ function Profile() {
     address: ''
   });
 
+  // Fetch data from the server when component mounts
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user && user.user_id) {
+        try {
+          const response = await axios.get(`http://localhost/enrollmentAPI/fetch_profile.php?user_id=${user.user_id}`);
+          const data = response.data;
+          console.log(data);
+          // Update the state with fetched data
+          setFormData({
+            first_name: data.first_name,
+            last_name: data.last_name,
+            date_of_birth: data.date_of_birth,
+            gender: data.gender,
+            email_address: data.email_address,
+            contact_number: data.contact_number,
+            home_address: data.home_address,
+          });
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
   // Handle input change and update state
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(formData);
   };
 
-  // Fetch data from the server
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost/enrollmentAPI/update_profile.php', { ...formData, user_id: user.user_id });
+      console.log(formData);
+      console.log(response);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  // Fetch data from the server on button click
   const handleFetch = async () => {
     try {
-      const response = await axios.get('http://localhost/enrollmentAPI/fetch_profile.php');
+      const response = await axios.get(`http://localhost/enrollmentAPI/fetch_profile.php?user_id=${user.user_id}`);
       const data = response.data;
 
       // Update the state with fetched data
       setFormData({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dob: data.dob,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        date_of_birth: data.date_of_birth,
         gender: data.gender,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
+        email_address: data.email_address,
+        contact_number: data.contact_number,
+        home_address: data.home_address,
       });
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Submit form data
-    console.log('Form submitted:', formData);
   };
 
   return (
@@ -58,7 +94,7 @@ function Profile() {
               type="text"
               id="firstName"
               name="firstName"
-              value={formData.firstName}
+              value={formData.first_name}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -69,7 +105,7 @@ function Profile() {
               type="text"
               id="lastName"
               name="lastName"
-              value={formData.lastName}
+              value={formData.last_name}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -80,7 +116,7 @@ function Profile() {
               type="date"
               id="dob"
               name="dob"
-              value={formData.dob}
+              value={formData.date_of_birth}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -106,7 +142,7 @@ function Profile() {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              value={formData.email_address}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -117,7 +153,7 @@ function Profile() {
               type="tel"
               id="phone"
               name="phone"
-              value={formData.phone}
+              value={formData.contact_number}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -128,7 +164,7 @@ function Profile() {
               type="text"
               id="address"
               name="address"
-              value={formData.address}
+              value={formData.home_address}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
