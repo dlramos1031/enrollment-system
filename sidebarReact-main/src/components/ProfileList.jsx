@@ -6,6 +6,7 @@ function ProfileList() {
   const [filter, setFilter] = useState({ role: '1', status: '0' }); // Default to showing students who are enrolled
 
   useEffect(() => {
+    console.log(profiles);
     const fetchProfiles = async () => {
       try {
         const response = await axios.get(`http://localhost/enrollmentAPI/fetch_profiles.php?role=${filter.role}&status=${filter.status}`);
@@ -88,12 +89,12 @@ function ProfileList() {
                 <td className="px-4 py-2">{profile.email_address}</td>
                 <td className="px-4 py-2">{profile.home_address}</td>
                 <td className="px-4 py-2">
-                  {profile.status === '0' ? (
+                  {profile.status === 0 ? (
                     <button
                       onClick={() => handleRoleToggle(profile)}
                       className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
-                      {profile.role === '0' ? 'Set as Student' : 'Set as Guest'}
+                      {profile.role === 0 ? 'Set as Student' : 'Set as Guest'}
                     </button>
                   ) : (
                     profile.role === '0' ? 'Guest' : 'Student'

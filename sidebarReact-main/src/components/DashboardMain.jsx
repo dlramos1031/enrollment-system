@@ -1,10 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const DashboardMain = () => {
   const { user } = useUser();
+  const [studentStatus, setStudentStatus] = useState(0);
   const navigate = useNavigate();
   const roles = ['Guest', 'Student', 'Admission Staff', 'Department Head', 'Registrar', 'Admin'];
+  const status = ['Not admitted', 'Pending Application', 'Admitted / Not Enrolled', 'Enrolled'];
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost/enrollmentAPI/fetch_status.php?user_id=${user.user_id}`);
+        console.log(response.data);
+        setStudentStatus(response.data.status);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchStatus();
+  });
 
   const handleProfileNavigation = () => {
     navigate("/dashboard/profile");
@@ -18,6 +35,9 @@ const DashboardMain = () => {
       <div className="text-lg text-gray-700">
         <p>
           Your role: <span className="text-green-700">{roles[user.role]}</span>
+        </p>
+        <p>
+          Your status: <span className="text-green-700">{status[studentStatus]}</span>
         </p>
       </div>
       {user.role === 0 ? (
