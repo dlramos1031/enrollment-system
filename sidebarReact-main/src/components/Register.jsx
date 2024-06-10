@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react'; // Importing icons for password toggle
 
 function Register() {
-    const [formData, setFormData] = useState({ username: '', password: '', email: '' });
+    const [formData, setFormData] = useState({ username: '', password: '', confirmPassword: '' });
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // State for showing password
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -13,8 +15,12 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
         try {
-            const response = await axios.post('http://localhost/enrollmentAPI/register.php', formData);
+            const response = await axios.post('http://localhost/enrollmentAPI/register.php', { username: formData.username, password: formData.password });
             console.log(response.data);
             if (response.data.success) {
                 window.alert(response.data.success);
@@ -27,6 +33,10 @@ function Register() {
             setError("An error occurred during registration.");
             console.error("Register error:", error);
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -46,23 +56,32 @@ function Register() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none"
+                            onClick={togglePasswordVisibility}
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <input
                         type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
                         onChange={handleChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />

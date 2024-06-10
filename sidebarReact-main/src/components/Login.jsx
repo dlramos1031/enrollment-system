@@ -2,10 +2,12 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import { Eye, EyeOff } from 'lucide-react'; // Importing icons for password toggle
 
 function Login() {
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // State for showing password
     const navigate = useNavigate();
     const { setUser } = useUser();
 
@@ -34,6 +36,10 @@ function Login() {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className="p-6 bg-gray-200 shadow-md rounded-md max-w-md mx-auto mt-10">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">Login</h2>
@@ -52,14 +58,23 @@ function Login() {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 px-3 flex items-center focus:outline-none"
+                            onClick={togglePasswordVisibility}
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                 </div>
                 <div className="mt-6 flex justify-between">
                     <button
