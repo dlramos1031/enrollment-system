@@ -10,6 +10,7 @@ import ApplicationList from './components/ApplicationList';
 import { UserProvider } from './contexts/UserContext';
 import './App.css'; // background
 import DashboardMain from './components/DashboardMain';
+import ProfileList from './components/ProfileList';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="main" element={<DashboardMain />} />
             <Route path="enrollment" element={<Enrollment />} />
             <Route path="application" element={<Application />} />
+            <Route path="proflist" element={<ProfileList />} />
             <Route path="applist" element={<ApplicationList />} />
           </Route>
         </Routes>

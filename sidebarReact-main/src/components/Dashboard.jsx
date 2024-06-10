@@ -35,6 +35,7 @@ function Dashboard() {
         {user.role === 1 && <SidebarItem icon={<StickyNote size={20} />} text="Application" alert to="/dashboard/application" />}
         {user.role === 1 && <SidebarItem icon={<StickyNote size={20} />} text="Enrollment" alert to="/dashboard/enrollment" />}
         {user.role >= 2 && <SidebarItem icon={<StickyNote size={20} />} text="Application List" alert to="/dashboard/applist" />}
+        {user.role >= 2 && <SidebarItem icon={<StickyNote size={20} />} text="Student Profile List" alert to="/dashboard/proflist" />}
         <hr className="my-3" />
         <SidebarItem icon={<LogOut size={20} />} text="Log Out" to="/login" onClick={handleLogout} />
       </Sidebar>

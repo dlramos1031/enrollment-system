@@ -4,6 +4,7 @@ import { useUser } from "../contexts/UserContext";
 const DashboardMain = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const roles = ['Guest', 'Student', 'Admission Staff', 'Department Head', 'Registrar', 'Admin'];
 
   const handleProfileNavigation = () => {
     navigate("/dashboard/profile");
@@ -14,6 +15,11 @@ const DashboardMain = () => {
       <h2 className="text-2xl font-semibold mb-6 text-gray-800">
         Hello there!
       </h2>
+      <div className="text-lg text-gray-700">
+        <p>
+          Your role: <span className="text-green-700">{roles[user.role]}</span>
+        </p>
+      </div>
       {user.role === 0 ? (
         <div className="text-lg text-gray-700">
           <p>
