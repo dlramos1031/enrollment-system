@@ -17,6 +17,7 @@ function Register() {
             const response = await axios.post('http://localhost/enrollmentAPI/register.php', formData);
             console.log(response.data);
             if (response.data.success) {
+                window.alert(response.data.success);
                 navigate('/login');
             } else {
                 setError(response.data.error);
@@ -31,7 +32,7 @@ function Register() {
     return (
         <div className="p-6 bg-gray-200 shadow-md rounded-md max-w-md mx-auto mt-10">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">Register</h2>
-            {error && <div className="mb-4 text-red-600">{error}</div>}
+            {error && <div className="mb-4 p-2 rounded-md text-red-800 bg-red-200">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>

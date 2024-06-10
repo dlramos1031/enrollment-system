@@ -10,6 +10,7 @@ function Dashboard() {
   const { user, setUser } = useUser();
 
   useEffect(() => {
+    console.log("Current user: ", user);
     if (!user || !user.user_id) {
       navigate('/login');
     }
@@ -21,12 +22,19 @@ function Dashboard() {
   };
 
   return (
+//  Roles:
+//  0 = Guest
+//  1 = Student
+//  2 = Admission Staff
+//  3 = Department Head
+//  4 = Registrar
     <div className="flex">
       <Sidebar>
-        <SidebarItem icon={<CircleUserRound size={20} />} text="Profile" alert to="/dashboard/profile" />
-        <SidebarItem icon={<StickyNote size={20} />} text="Enrollment" alert to="/dashboard/enrollment" />
-        <SidebarItem icon={<StickyNote size={20} />} text="Application" alert to="/dashboard/application" />
-        <SidebarItem icon={<StickyNote size={20} />} text="Application List" alert to="/dashboard/applist" />
+        <SidebarItem icon={<StickyNote size={20} />} text="Main" alert to="/dashboard/main" />
+        {user.role < 2 && <SidebarItem icon={<CircleUserRound size={20} />} text="Profile" alert to="/dashboard/profile" />}
+        {user.role === 1 && <SidebarItem icon={<StickyNote size={20} />} text="Application" alert to="/dashboard/application" />}
+        {user.role === 1 && <SidebarItem icon={<StickyNote size={20} />} text="Enrollment" alert to="/dashboard/enrollment" />}
+        {user.role >= 2 && <SidebarItem icon={<StickyNote size={20} />} text="Application List" alert to="/dashboard/applist" />}
         <hr className="my-3" />
         <SidebarItem icon={<LogOut size={20} />} text="Log Out" to="/login" onClick={handleLogout} />
       </Sidebar>

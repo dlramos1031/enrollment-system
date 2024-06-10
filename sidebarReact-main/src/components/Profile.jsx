@@ -1,4 +1,3 @@
-// Profile.jsx
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
@@ -9,7 +8,9 @@ function Profile() {
   // Initialize state for form inputs and mode
   const [formData, setFormData] = useState({
     first_name: '',
+    middle_name: '',
     last_name: '',
+    suffix: '',
     date_of_birth: '',
     gender: '',
     email_address: '',
@@ -29,7 +30,9 @@ function Profile() {
           // Update the state with fetched data
           setFormData({
             first_name: data.first_name,
+            middle_name: data.middle_name,
             last_name: data.last_name,
+            suffix: data.suffix,
             date_of_birth: data.date_of_birth,
             gender: data.gender,
             email_address: data.email_address,
@@ -52,7 +55,6 @@ function Profile() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target.id);
     const confirmSave = window.confirm("Are you sure you want to save the changes?");
     if (confirmSave) {
       try {
@@ -67,8 +69,7 @@ function Profile() {
   };
 
   // Handle edit mode
-  const handleEdit = (e) => {
-    console.log("Hande edit: ", e.target.id);
+  const handleEdit = () => {
     setMode('edit');
   };
 
@@ -81,7 +82,9 @@ function Profile() {
       // Update the state with fetched data
       setFormData({
         first_name: data.first_name,
+        middle_name: data.middle_name,
         last_name: data.last_name,
+        suffix: data.suffix,
         date_of_birth: data.date_of_birth,
         gender: data.gender,
         email_address: data.email_address,
@@ -98,29 +101,55 @@ function Profile() {
       <h2 className="text-2xl font-semibold mb-6 text-gray-800">Student Profile</h2>
       <form>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">First Name</label>
-            <input
-              type="text"
-              id="first_name"
-              name="first_name"
-              value={formData.first_name}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-              className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-            />
-          </div>
-          <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Last Name</label>
-            <input
-              type="text"
-              id="last_name"
-              name="last_name"
-              value={formData.last_name}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-              className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-            />
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+              <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">First Name</label>
+              <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              />
+            </div>
+            <div>
+              <label htmlFor="middle_name" className="block text-sm font-medium text-gray-700">Middle Name</label>
+              <input
+                type="text"
+                id="middle_name"
+                name="middle_name"
+                value={formData.middle_name}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              />
+            </div>
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Last Name</label>
+              <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              />
+            </div>
+            <div>
+              <label htmlFor="suffix" className="block text-sm font-medium text-gray-700">Suffix</label>
+              <input
+                type="text"
+                id="suffix"
+                name="suffix"
+                value={formData.suffix}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={`mt-1 block w-full p-2 ${mode === 'view' ? 'bg-gray-100' : 'bg-white'} border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700">Date of Birth</label>
