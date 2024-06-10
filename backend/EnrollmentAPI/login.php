@@ -1,7 +1,6 @@
 <?php
 include 'config.php';
 include 'cor.php';
-session_start();
 
 header("Content-Type: application/json");
 
@@ -18,6 +17,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
     if (password_verify($password, $user['password'])) {
+        session_start();
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['role'] = $user['role'];
         echo json_encode(["success" => "Login successful", 
@@ -25,10 +25,10 @@ if ($result->num_rows > 0) {
                         "role" => $_SESSION['role'], 
                         "loggedIn" => true]);
     } else {
-        echo json_encode(["message" => "Invalid password"]);
+        echo json_encode(["error" => "Invalid password"]);
     }
 } else {
-    echo json_encode(["message" => "Invalid username"]);
+    echo json_encode(["error" => "Invalid username"]);
 }
 
 $stmt->close();

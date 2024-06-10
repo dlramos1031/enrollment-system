@@ -1,10 +1,10 @@
 <?php
 include 'config.php';
 include 'cor.php';
-session_start();
 
 header("Content-Type: application/json");
 
+session_start();
 var_dump($_SESSION);
 echo json_encode([
     "loggedIn" => $_SESSION['loggedIn'],
