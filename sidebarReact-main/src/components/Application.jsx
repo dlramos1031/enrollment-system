@@ -41,20 +41,19 @@ function Application() {
     fetchPrograms();
   }, [formData.collegeDepartment]);
 
-  useEffect(() => {
-    const fetchStatus = async () => {
-      if (user && user.user_id) {
-        try {
-          const response = await axios.get(`http://localhost/enrollmentAPI/fetch_status.php?user_id=${user.user_id}`);
-          setStudentStatus(response.data.status);
-          console.log(response.data);
-        } catch (error) {
-          console.error('Error fetching student status:', error);
-        }
-      }
-    };
-    fetchStatus();
-  }, [user]);
+  // useEffect(() => {
+  //   const fetchStatus = async () => {
+  //     if (user && user.user_id) {
+  //       try {
+  //         const response = await axios.get(`http://localhost/enrollmentAPI/fetch_form.php?user_id=${user.user_id}`);
+  //         console.log(response.data);
+  //       } catch (error) {
+  //         console.error('Error fetching student status:', error);
+  //       }
+  //     }
+  //   };
+  //   fetchStatus();
+  // }, [user]);
 
   useEffect(() => {
     const fetchForm = async () => {
@@ -149,9 +148,10 @@ function Application() {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="">Select Student Type</option>
-              <option value="1">Freshman</option>
-              <option value="2">Transferee</option>
-              <option value="3">Shiftee</option>
+              <option value="0">Freshman</option>
+              <option value="1">Transferee</option>
+              <option value="2">Shiftee</option>
+              <option value="3">Returnee</option>
               <option value="4">Second Courser</option>
             </select>
           </div>
