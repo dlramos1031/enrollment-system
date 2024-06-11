@@ -13,6 +13,7 @@ function Application() {
   const [degreePrograms, setDegreePrograms] = useState([]);
   const [collegeDepartments, setCollegeDepartments] = useState([]);
   const [message, setMessage] = useState('');
+  const [studentStatus, setStudentStatus] = useState(0);
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -40,6 +41,28 @@ function Application() {
     fetchPrograms();
   }, [formData.collegeDepartment]);
 
+  useEffect(() => {
+    const fetchStatus = async () => {
+      if (user && user.user_id) {
+        try {
+          const response = await axios.get(`http://localhost/enrollmentAPI/fetch_status.php?user_id=${user.user_id}`);
+          setStudentStatus(response.data.status);
+          console.log(response.data);
+        } catch (error) {
+          console.error('Error fetching student status:', error);
+        }
+      }
+    };
+    fetchStatus();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      console.log("Student status: ", studentStatus);
+    }
+    fetchForm();
+  }, [studentStatus]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -50,6 +73,10 @@ function Application() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (studentStatus !== 0) {
+      setMessage('You already have a pending application.');
+      return;
+    }
     try {
       const submissionData = {
         user_id: user.user_id,
@@ -60,6 +87,7 @@ function Application() {
       console.log(response.data);
       setSubmitted(true);
       setMessage('Please wait for the Admission Staff to handle your application.');
+      setStudentStatus(1);  // Update the status to pending after submission
     } catch (error) {
       console.error('Error submitting application:', error);
     }
@@ -77,7 +105,7 @@ function Application() {
               name="collegeDepartment"
               value={formData.collegeDepartment}
               onChange={handleChange}
-              disabled={submitted}
+              disabled={submitted || studentStatus !== 0}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="">Select College Department</option>
@@ -97,7 +125,7 @@ function Application() {
                 name="degreeProgram"
                 value={formData.degreeProgram}
                 onChange={handleChange}
-                disabled={submitted}
+                disabled={submitted || studentStatus !== 0}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
                 <option value="">Select Degree Program</option>
@@ -117,7 +145,7 @@ function Application() {
               name="studentType"
               value={formData.studentType}
               onChange={handleChange}
-              disabled={submitted}
+              disabled={submitted || studentStatus !== 0}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="">Select Student Type</option>
@@ -132,10 +160,10 @@ function Application() {
         <div className="mt-6 flex justify-end">
           <button
             type="submit"
-            disabled={submitted}
-            className={`px-4 py-2 mx-1 font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${submitted ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500'}`}
+            disabled={studentStatus !== 0}
+            className={`px-4 py-2 mx-1 font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${submitted || studentStatus !== 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500'}`}
           >
-            {submitted ? 'Submitted' : 'Submit'}
+            {submitted || studentStatus !== 0 ? 'Submitted' : 'Submit'}
           </button>
         </div>
       </form>
