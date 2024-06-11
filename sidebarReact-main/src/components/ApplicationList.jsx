@@ -1,26 +1,34 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUser } from '../contexts/UserContext';
 
 function Applications() {
+  const { user } = useUser();
   const [applications, setApplications] = useState([]);
   const studentType = ['Freshman', 'Transferee', 'Shiftee', 'Returnee', 'Second Courser'];
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.get('http://localhost/enrollmentAPI/fetch_applications.php');
+        const response = await axios.get('http://localhost/enrollmentAPI/fetch_applications.php', {
+          params: {
+            role: user.role
+          }
+        });
         console.log('API response:', response.data);
         setApplications(response.data);
       } catch (error) {
         console.error('Error fetching applications:', error);
       }
     };
+  
     fetchApplications();
-  }, []);  
+  }, []);
+   
 
   const handleAccept = async (id) => {
     try {
-      const response = await axios.post('http://localhost/enrollmentAPI/accept_application.php', { id });
+      const response = await axios.post('http://localhost/enrollmentAPI/accept_application.php', { id, role: user.role });
       if (response.data.status === 'success') {
         setApplications(applications.filter(application => application.application_id !== id));
       } else {
@@ -30,6 +38,7 @@ function Applications() {
       console.error('Error accepting application:', error);
     }
   };
+  
 
   const handleReject = async (id) => {
     try {
