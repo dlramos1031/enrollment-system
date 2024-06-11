@@ -7,14 +7,13 @@ const DashboardMain = () => {
   const { user } = useUser();
   const [studentStatus, setStudentStatus] = useState(0);
   const navigate = useNavigate();
-  const roles = ['Guest', 'Student', 'Admission Staff', 'Department Head', 'Registrar', 'Admin'];
-  const status = ['Not admitted', 'Pending Application', 'Admitted / Not Enrolled', 'Enrolled'];
+  const roles = ['Guest', 'Student', 'Admission Staff', 'Department Head', 'Registrar', 'Faculty Staff'];
+  const status = ['Not admitted', 'Pending Application', 'Admitted / Not Enrolled', 'Pending Enrollment', 'Enrolled'];
 
   useEffect(() => {
     const fetchStatus = async () => {
       try {
         const response = await axios.get(`http://localhost/enrollmentAPI/fetch_status.php?user_id=${user.user_id}`);
-        console.log(response.data);
         setStudentStatus(response.data.status);
       } catch (error) {
         console.log(error);
@@ -52,14 +51,20 @@ const DashboardMain = () => {
             </span>.
           </p>
           <p>
-            After setting up, please wait for the Admission Staff to verify your
-            credentials.
+            After setting up, please wait for the Admission Staff to verify your credentials.
           </p>
         </div>
-      ) : user.role === 1 ? (
+      ) : (user.role === 1 && studentStatus === 0) ? (
         <div className="text-lg text-gray-700">
-          {/* Add content for role 1 here */}
-          <p>Welcome to the admin dashboard.</p>
+          <p>
+            Apply for an admissoin on 
+            <span
+              onClick={handleProfileNavigation}
+              className="text-indigo-600 cursor-pointer hover:underline"
+            >
+              Application
+            </span> page.
+          </p>
         </div>
       ) : user.role === 2 ? (
         <div className="text-lg text-gray-700">

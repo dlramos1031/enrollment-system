@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUser } from '../contexts/UserContext';
 
 function Application() {
+  const { user } = useUser();
   const [formData, setFormData] = useState({
     collegeDepartment: '',
     degreeProgram: '',
@@ -9,38 +11,33 @@ function Application() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [degreePrograms, setDegreePrograms] = useState([]);
+  const [collegeDepartments, setCollegeDepartments] = useState([]);
   const [message, setMessage] = useState('');
 
-  const collegeDepartments = [
-    {
-      name: 'College of Information Technology and Computing',
-      programs: [
-        'Information Technology',
-        'Computer Science',
-        'Data Science',
-        'Technology Communications Management'
-      ],
-    },
-    {
-      name: 'College of Engineering and Architecture',
-      programs: [
-        'Civil Engineering',
-        'Mechanical Engineering',
-        'Electrical Engineering',
-        'Architecture'
-      ],
-    }
-  ];
-
-  const studentTypes = ['Freshman', 'Transferee', 'Shiftee', 'Second Courser'];
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get('http://localhost/enrollmentAPI/get_departments.php');
+        setCollegeDepartments(response.data);
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   useEffect(() => {
-    if (formData.collegeDepartment) {
-      const selectedCollege = collegeDepartments.find(
-        college => college.name === formData.collegeDepartment
-      );
-      setDegreePrograms(selectedCollege ? selectedCollege.programs : []);
-    }
+    const fetchPrograms = async () => {
+      if (formData.collegeDepartment) {
+        try {
+          const response = await axios.get(`http://localhost/enrollmentAPI/get_programs.php?dept_id=${formData.collegeDepartment}`);
+          setDegreePrograms(response.data);
+        } catch (error) {
+          console.error('Error fetching programs:', error);
+        }
+      }
+    };
+    fetchPrograms();
   }, [formData.collegeDepartment]);
 
   const handleChange = (e) => {
@@ -54,8 +51,13 @@ function Application() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost/enrollmentAPI/submit_application.php', formData);
-      console.log(formData);
+      const submissionData = {
+        user_id: user.user_id,
+        program_id: formData.degreeProgram,
+        student_type: formData.studentType
+      };
+      const response = await axios.post('http://localhost/enrollmentAPI/submit_application.php', submissionData);
+      console.log(response.data);
       setSubmitted(true);
       setMessage('Please wait for the Admission Staff to handle your application.');
     } catch (error) {
@@ -80,7 +82,7 @@ function Application() {
             >
               <option value="">Select College Department</option>
               {collegeDepartments.map((college) => (
-                <option key={college.name} value={college.name}>
+                <option key={college.dept_id} value={college.dept_id}>
                   {college.name}
                 </option>
               ))}
@@ -100,8 +102,8 @@ function Application() {
               >
                 <option value="">Select Degree Program</option>
                 {degreePrograms.map((program) => (
-                  <option key={program} value={program}>
-                    {program}
+                  <option key={program.program_id} value={program.program_id}>
+                    {program.name}
                   </option>
                 ))}
               </select>
@@ -119,11 +121,10 @@ function Application() {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="">Select Student Type</option>
-              {studentTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
+              <option value="1">Freshman</option>
+              <option value="2">Transferee</option>
+              <option value="3">Shiftee</option>
+              <option value="4">Second Courser</option>
             </select>
           </div>
         </div>
