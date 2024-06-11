@@ -33,11 +33,17 @@ const DashboardMain = () => {
       </h2>
       <div className="text-lg text-gray-700">
         <p>
-          Your role: <span className="text-green-700">{roles[user.role]}</span>
+          User ID: <span className="text-green-700 underline">{user.user_id}</span>
         </p>
         <p>
-          Your status: <span className="text-green-700">{status[studentStatus]}</span>
+          Role: <span className="text-green-700 underline">{roles[user.role]}</span>
         </p>
+        {user.role === 1 && ( // Only shows student status on Students
+          <p>
+          Your status: <span className="text-green-700">{status[studentStatus]}</span>
+          </p>
+
+        )}
       </div>
       {user.role === 0 ? (
         <div className="text-lg text-gray-700">
@@ -51,7 +57,7 @@ const DashboardMain = () => {
             </span>.
           </p>
           <p>
-            After setting up, please wait for the Admission Staff to verify your credentials.
+            After setting up, please wait for the Admission Staff to verify your profile.
           </p>
         </div>
       ) : (user.role === 1 && studentStatus === 0) ? (
