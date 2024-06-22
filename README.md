@@ -45,4 +45,6 @@ Before we start, open the repository in VS Code.
 
 ### Other things
 
+If nigana tanan, naa ra sa database ang mga user accounts. Mostly tanan kay 1 ang password. Try username: `admin_staff`, password: `1`
+
 If something goes wrong, just mention it in the gc hehe.
