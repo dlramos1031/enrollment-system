@@ -2,6 +2,20 @@
 
 
 Before we start, open the repository in VS Code.
+
+### Setting up Environment
+
+1. At the root of your project (sa pinaka gawas sa project), create a file called `.env`
+2. Paste these following inside the `.env` file:
+  ```
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASSWORD=
+  DB_NAME=enrollment_db
+  SESSION_SECRET=hello
+  ```
+3. Save and exit.
+
 ### XAMPP Server
 
 1. Open XAMPP control panel and create a new database called `enrollment_db`
