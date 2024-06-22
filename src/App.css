@@ -1,0 +1,14 @@
+/* This is for the contact list in AppList.jsx */
+.custom-list {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 0; /* Remove default padding */
+}
+
+.custom-list li {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.custom-list .icon {
+  margin-right: 8px; /* Space between icon and text */
+}
